@@ -158,9 +158,14 @@ export function Footer() {
           </p>
           <p className="text-sm text-background/40">
             {t.footer.developer}{" "}
-            <span className="text-brand-beige">
+            <Link
+              href="https://wa.me/201558905021"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-beige hover:text-brand-green transition-colors"
+            >
               Ibrahim Mabrouk
-            </span>
+            </Link>
           </p>
         </div>
       </div>
