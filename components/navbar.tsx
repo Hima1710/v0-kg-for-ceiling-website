@@ -97,6 +97,7 @@ export function Navbar() {
           <div className="flex items-center gap-2 md:hidden">
             {/* Mobile Language Switcher */}
             <button
+              type="button"
               onClick={toggleLanguage}
               className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-brand-green transition-colors p-2"
               aria-label="Switch language"
@@ -105,50 +106,49 @@ export function Navbar() {
               <span className="text-xs">{language === "ar" ? "EN" : "عربي"}</span>
             </button>
             
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
+              type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-md hover:bg-muted transition-colors"
               aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </Button>
+            </button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden"
-            >
-              <div className="py-6 flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-base font-medium text-foreground/80 hover:text-brand-green transition-colors py-2"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                <Button
-                  asChild
-                  className="bg-brand-red hover:bg-brand-red/90 text-white rounded-full w-full mt-2"
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden absolute top-full left-0 right-0 bg-background shadow-lg border-t border-border"
+          >
+            <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-base font-medium text-foreground hover:text-brand-green transition-colors py-3 border-b border-border/50"
                 >
-                  <Link href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
-                    {t.nav.getQuote}
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  {link.label}
+                </Link>
+              ))}
+              <Button
+                asChild
+                className="bg-brand-red hover:bg-brand-red/90 text-white rounded-full w-full mt-4"
+              >
+                <Link href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+                  {t.nav.getQuote}
+                </Link>
+              </Button>
+            </div>
+          </motion.div>
+        )}
       </nav>
     </motion.header>
   )
