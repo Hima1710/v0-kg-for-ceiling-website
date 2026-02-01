@@ -38,18 +38,66 @@ export function Contact() {
     },
   ]
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    
+    const formData = new FormData(e.currentTarget)
+    const name = formData.get("name") as string
+    const phone = formData.get("phone") as string
+    const email = formData.get("email") as string
+    const service = formData.get("service") as string
+    const message = formData.get("message") as string
+
+    // Get service label based on value
+    const serviceLabels: Record<string, { ar: string; en: string }> = {
+      ceiling: { ar: "أسقف جبسية", en: "Gypsum Ceilings" },
+      partition: { ar: "قواطيع", en: "Partitions" },
+      custom: { ar: "تشطيبات مخصصة", en: "Custom Finishing" },
+      other: { ar: "أخرى", en: "Other" },
+    }
+    const serviceLabel = serviceLabels[service]?.[language] || service
+
+    // Format WhatsApp message
+    const whatsappMessage = language === "ar" 
+      ? `*طلب عرض سعر جديد*
+━━━━━━━━━━━━━━━
+*الاسم:* ${name}
+*رقم الهاتف:* ${phone}
+*البريد الإلكتروني:* ${email}
+*الخدمة المطلوبة:* ${serviceLabel}
+━━━━━━━━━━━━━━━
+*تفاصيل الطلب:*
+${message}
+━━━━━━━━━━━━━━━
+_تم الإرسال من موقع KG For Ceiling_`
+      : `*New Quote Request*
+━━━━━━━━━━━━━━━
+*Name:* ${name}
+*Phone:* ${phone}
+*Email:* ${email}
+*Service:* ${serviceLabel}
+━━━━━━━━━━━━━━━
+*Message:*
+${message}
+━━━━━━━━━━━━━━━
+_Sent from KG For Ceiling website_`
+
+    // Encode message for URL
+    const encodedMessage = encodeURIComponent(whatsappMessage)
+    const whatsappURL = `https://wa.me/201005335945?text=${encodedMessage}`
+
+    // Open WhatsApp
+    window.open(whatsappURL, "_blank")
+
     setIsSubmitting(false)
     setIsSubmitted(true)
     
-    // Reset after showing success message
-    setTimeout(() => setIsSubmitted(false), 3000)
+    // Reset form after showing success message
+    setTimeout(() => {
+      setIsSubmitted(false)
+      e.currentTarget?.reset()
+    }, 3000)
   }
 
   return (
