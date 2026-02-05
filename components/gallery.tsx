@@ -175,22 +175,66 @@ export function Gallery() {
   const NextIcon = isRTL ? ChevronLeft : ChevronRight
 
   return (
-    <section id="gallery" className="py-24 md:py-32 bg-brand-light">
-      <div className="container mx-auto px-4 md:px-6">
-        {/* Section Header */}
+    <section id="gallery" className="py-24 md:py-32 bg-gradient-to-br from-brand-light via-white to-brand-light/50 relative overflow-hidden">
+      {/* Luxury Background Elements */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-brand-gold rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-brand-green rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-brand-beige/10 to-transparent rounded-full" />
+      </div>
+
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        {/* Luxury Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16 md:mb-20"
+          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="text-center max-w-4xl mx-auto mb-20 md:mb-24"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-brand-green mb-6 text-balance">
-            {t.gallery.title}
-          </h2>
-          <p className="text-muted-foreground text-lg text-pretty">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-block mb-6"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-gold via-brand-beige to-brand-gold blur-lg opacity-30 scale-110" />
+              <div className="relative bg-gradient-to-r from-brand-gold/20 to-brand-beige/20 backdrop-blur-sm border border-brand-gold/30 rounded-full px-6 py-2">
+                <span className="text-brand-gold font-semibold text-sm uppercase tracking-wider">Portfolio</span>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-balance relative"
+          >
+            <span className="bg-gradient-to-r from-brand-green via-brand-green-dark to-brand-red bg-clip-text text-transparent">
+              {t.gallery.title}
+            </span>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-brand-gold to-brand-beige rounded-full"
+            />
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-muted-foreground text-xl text-pretty leading-relaxed max-w-2xl mx-auto"
+          >
             {t.gallery.subtitle}
-          </p>
+          </motion.p>
         </motion.div>
 
         {/* Masonry Grid */}
@@ -244,79 +288,146 @@ export function Gallery() {
         </motion.div>
       </div>
 
-      {/* Lightbox */}
+      {/* Premium Lightbox */}
       <AnimatePresence>
         {selectedProject !== null && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            className="fixed inset-0 z-50 bg-gradient-to-br from-black/95 via-black/90 to-black/95 backdrop-blur-sm flex flex-col"
             onClick={closeLightbox}
           >
-            {/* Close Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 end-4 text-white hover:bg-white/10 z-10"
-              onClick={closeLightbox}
-              aria-label={t.gallery.close}
-            >
-              <X className="w-6 h-6" />
-            </Button>
-
-            {/* Navigation Buttons */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute start-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/10 z-10"
-              onClick={(e) => {
-                e.stopPropagation()
-                goPrev()
-              }}
-              aria-label={t.gallery.previous}
-            >
-              <PrevIcon className="w-8 h-8" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute end-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/10 z-10"
-              onClick={(e) => {
-                e.stopPropagation()
-                goNext()
-              }}
-              aria-label={t.gallery.next}
-            >
-              <NextIcon className="w-8 h-8" />
-            </Button>
-
-            {/* Image */}
+            {/* Header */}
             <motion.div
-              key={`${selectedProject.projectIndex}-${selectedProject.imageIndex}`}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-full max-w-5xl h-[80vh] mx-4"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              className="flex justify-between items-center p-6 bg-gradient-to-r from-brand-green/20 to-brand-red/20 backdrop-blur-md border-b border-white/10"
             >
-              <img
-                src={projects[selectedProject.projectIndex].images[selectedProject.imageIndex] || "/placeholder.svg"}
-                alt={projects[selectedProject.projectIndex].title_ar}
-                className="w-full h-full object-contain"
-              />
-              <div className="absolute bottom-0 left-0 right-0 text-center p-4 bg-gradient-to-t from-black/80 to-transparent">
+              <div className="flex-1">
+                <h2 className="text-white text-xl font-bold">
+                  {isRTL ? projects[selectedProject.projectIndex].title_ar : projects[selectedProject.projectIndex].title_en}
+                </h2>
                 <p className="text-brand-beige text-sm uppercase tracking-wider">
                   {isRTL ? projects[selectedProject.projectIndex].category_ar : projects[selectedProject.projectIndex].category_en}
                 </p>
-                <h3 className="text-white text-2xl font-semibold">
-                  {isRTL ? projects[selectedProject.projectIndex].title_ar : projects[selectedProject.projectIndex].title_en}
-                </h3>
-                <p className="text-white text-sm mt-2">
-                  {selectedProject.imageIndex + 1} / {projects[selectedProject.projectIndex].images.length}
-                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10 rounded-full w-10 h-10"
+                onClick={closeLightbox}
+                aria-label={t.gallery.close}
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </motion.div>
+
+            {/* Main Content */}
+            <div className="flex-1 flex items-center justify-center p-6">
+              <div className="w-full max-w-7xl mx-auto">
+                {/* Image Container */}
+                <motion.div
+                  key={`${selectedProject.projectIndex}-${selectedProject.imageIndex}`}
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                  className="relative group"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10">
+                    <img
+                      src={projects[selectedProject.projectIndex].images[selectedProject.imageIndex] || "/placeholder.svg"}
+                      alt={projects[selectedProject.projectIndex].title_ar}
+                      className="w-full h-auto max-h-[70vh] object-contain"
+                    />
+                    {/* Image Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+
+                  {/* Navigation Buttons */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute start-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 rounded-full w-12 h-12 shadow-lg backdrop-blur-sm border border-white/20"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      goPrev()
+                    }}
+                    aria-label={t.gallery.previous}
+                  >
+                    <PrevIcon className="w-6 h-6" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute end-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 rounded-full w-12 h-12 shadow-lg backdrop-blur-sm border border-white/20"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      goNext()
+                    }}
+                    aria-label={t.gallery.next}
+                  >
+                    <NextIcon className="w-6 h-6" />
+                  </Button>
+                </motion.div>
+
+                {/* Thumbnails */}
+                {projects[selectedProject.projectIndex].images.length > 1 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3, delay: 0.2 }}
+                    className="mt-6 flex justify-center gap-2 overflow-x-auto pb-2"
+                  >
+                    {projects[selectedProject.projectIndex].images.map((image, index) => (
+                      <button
+                        key={index}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setSelectedProject({ ...selectedProject, imageIndex: index })
+                        }}
+                        className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                          index === selectedProject.imageIndex
+                            ? 'border-brand-beige shadow-lg scale-110'
+                            : 'border-white/30 hover:border-white/60'
+                        }`}
+                      >
+                        <img
+                          src={image || "/placeholder.svg"}
+                          alt={`Thumbnail ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+              className="p-6 bg-gradient-to-r from-brand-green/10 to-brand-red/10 backdrop-blur-md border-t border-white/10"
+            >
+              <div className="flex justify-between items-center text-white">
+                <div className="flex items-center gap-4">
+                  <div className="w-2 h-2 bg-brand-beige rounded-full animate-pulse" />
+                  <span className="text-sm">
+                    {selectedProject.imageIndex + 1} / {projects[selectedProject.projectIndex].images.length}
+                  </span>
+                </div>
+                <div className="text-sm text-brand-beige">
+                  KG For Ceiling Sadat
+                </div>
               </div>
             </motion.div>
           </motion.div>
